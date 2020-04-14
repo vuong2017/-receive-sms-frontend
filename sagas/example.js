@@ -1,4 +1,6 @@
 /* global fetch */
+import { getApiModule } from "@/api/ApiHelpers";
+
 
 import { all, call, delay, put, take, takeLatest } from 'redux-saga/effects'
 import es6promise from 'es6-promise'
@@ -18,10 +20,12 @@ function* runClockSaga() {
 
 function* loadDataSaga() {
   try {
-    const res = yield fetch('https://jsonplaceholder.typicode.com/users')
+    // const res = yield fetch('https://jsonplaceholder.typicode.com/users')
+    const res = yield getApiModule('Example').getList();
     const data = yield res.json()
     yield put(loadDataSuccess(data))
   } catch (err) {
+    // throw err;
     yield put(failure(err))
   }
 }
