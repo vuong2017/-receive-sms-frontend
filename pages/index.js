@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { loadData, startClock, tickClock } from '@/actions/example'
 
-import Layout from "@/components/layout/Layout";
+import { LayoutHome } from "@/components/Layout";
 import SideBar from "@/partials/home/SideBar";
 import Content from "@/partials/home/Content";
 
@@ -12,7 +12,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <LayoutHome>
         <div id="main">
           <div className="main-view responsive-enabled">
             <div className="container flex-col" id="appContainer">
@@ -28,7 +28,7 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-      </Layout>
+      </LayoutHome>
     );
   }
 }
