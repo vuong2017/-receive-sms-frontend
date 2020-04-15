@@ -1,4 +1,4 @@
-import CardMessage from "@/components/cards/CardMessage";
+import { CardMessage } from "@/components/Cards";
 
 const SideBar = () => {
   return (

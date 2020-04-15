@@ -1,4 +1,4 @@
-import Avatar from "../avatars/ContactAvatar";
+import { ContactAvatar } from "../Avatars";
 
 const CardMessage = (props) => {
   return (
@@ -10,7 +10,7 @@ const CardMessage = (props) => {
       <div className="uikit-summary-list__cell-content">
         <div className="js-contact-avatar">
           <div>
-            <Avatar avatarColor={props.avatarColor}/>
+            <ContactAvatar avatarColor={props.avatarColor}/>
           </div>
         </div>
       </div>

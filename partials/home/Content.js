@@ -1,5 +1,5 @@
-import CardBorderMessage from "@/components/cards/CardBorderMessage";
-import Timestamp from "@/components/times/Timestamp";
+import { CardBorderMessage } from "@/components/Cards";
+import { Timestamp } from "@/components/Times";
 import RefreshMessage from "@/partials/home/RefreshMessage";
 
 const Content = () => {
