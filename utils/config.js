@@ -1,0 +1,1 @@
+export const BASE_URL = "https://text-now-laravel.herokuapp.com/api";

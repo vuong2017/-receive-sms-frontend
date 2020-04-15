@@ -6,19 +6,8 @@ import SideBar from "@/partials/home/SideBar";
 import Content from "@/partials/home/Content";
 
 class Home extends React.Component {
-  static async getInitialProps(props) {
-    const { store, isServer } = props.ctx;
-    store.dispatch(tickClock(isServer));
-
-    if (!store.getState().placeholderData) {
-      store.dispatch(loadData());
-    }
-
-    return { isServer };
-  }
-
   componentDidMount() {
-    this.props.dispatch(startClock())
+    this.props.dispatch(loadData())
   }
 
   render() {
