@@ -4,8 +4,18 @@ import { loadData, startClock, tickClock } from '@/actions/example'
 import { LayoutHome } from "@/components/Layout";
 import SideBar from "@/partials/home/SideBar";
 import Content from "@/partials/home/Content";
+import AuthHelper from "@/utils/AuthHelper";
 
 class Home extends React.Component {
+
+  static async getInitialProps(pageProps) {
+    const authHelper = new AuthHelper();
+    if (typeof window === 'undefined') {
+      return authHelper.checkRedirectLoginSSR(pageProps.ctx);
+    }
+    return authHelper.checkRedirectLoginCSR();
+  }
+
   componentDidMount() {
     this.props.dispatch(loadData())
   }

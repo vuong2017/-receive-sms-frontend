@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
@@ -6,6 +6,8 @@ import { login } from '@/actions/auth'
 import { LayoutAuthentication } from "@/components/Layout";
 import { Alert } from "@/components/Alerts";
 import { capitalizeFirstLetter, validateEmail, cloneDeep } from "@/utils/helpers";
+import AuthHelper from "@/utils/AuthHelper";
+
 const Login = (props) => {
   const { errorsMessage, loginFail } = props;
 
@@ -211,10 +213,16 @@ const Login = (props) => {
   );
 };
 
+Login.getInitialProps = async pageProps => {
+  const authHelper = new AuthHelper();
+  if (typeof window === 'undefined') {
+    return authHelper.checkRedirectHomeSSR(pageProps.ctx);
+  }
+  return authHelper.checkRedirectHomeCSR();
+}
+
 function mapStateToProps({ auth }) {
   const { userLogin, errorsMessage, loginFail } = auth;
-  console.log(errorsMessage);
-
   return {
     userLogin,
     errorsMessage,
