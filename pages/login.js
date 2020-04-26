@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+
+import { login } from '@/actions/auth'
 import { LayoutAuthentication } from "@/components/Layout";
 import { capitalizeFirstLetter, validateEmail, cloneDeep } from "@/utils/helpers";
-const Login = () => {
+const Login = (props) => {
   const defaultErrors = {
     email: {
       valid: false,
@@ -95,11 +99,12 @@ const Login = () => {
     return result;
   }
 
-  function login(event) {
+  function submit(event) {
     event.preventDefault();
     const validate = validateForm(dataForm);
     if (!validate.isValid) {
       setErrors(cloneDeep(defaultErrors));
+      props.login(dataForm);
     } else {
       setErrors({
         ...errors,
@@ -113,7 +118,7 @@ const Login = () => {
       <div className="limiter">
         <div className="container-login100">
           <div className="wrap-login100">
-            <form className="login100-form validate-form" onSubmit={login}>
+            <form className="login100-form validate-form" onSubmit={submit}>
               <span className="login100-form-title p-b-26">Text Now</span>
               <div
                 className={`wrap-input100 validate-input ${
@@ -181,4 +186,16 @@ const Login = () => {
   );
 };
 
-export default Login;
+function mapStateToProps({ auth }) {
+  const { userLogin } = auth;
+  return {
+    userLogin
+  };
+}
+
+const mapDispatchToprops = (dispatch) => {
+  return bindActionCreators({ login }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToprops)(Login);
+
