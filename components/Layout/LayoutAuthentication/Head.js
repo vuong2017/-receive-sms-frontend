@@ -10,7 +10,7 @@ const Header = () => {
       <link
         rel="stylesheet"
         type="text/css"
-        href="vendor/bootstrap/css/bootstrap.min.css"
+        href="vendor/bootstrap/bootstrap.min.css"
       />
       <link
         rel="stylesheet"

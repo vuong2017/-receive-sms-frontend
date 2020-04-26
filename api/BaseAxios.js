@@ -20,7 +20,7 @@ export default class BaseApi {
         params,
       });
       console.log(result.response());
-      return result;
+      return result.data;
     } catch (error) {
       console.log(error);
       throw error;
@@ -30,7 +30,7 @@ export default class BaseApi {
   async post(url, body = {}) {
     try {
       const result = await this._axios.post(this.getUrlPrefix(url), body);
-      return result;
+      return result.data;
     } catch (error) {
       throw error;
     }
@@ -39,7 +39,7 @@ export default class BaseApi {
   async patch(url, body = {}) {
     try {
       const result = await this._axios.patch(this.getUrlPrefix(url), body);
-      return result;
+      return result.data;
     } catch (error) {
       throw error;
     }
@@ -48,7 +48,7 @@ export default class BaseApi {
   async remove(url) {
     try {
       const result = await this._axios.delete(this.getUrlPrefix(url));
-      return result;
+      return result.data;
     } catch (error) {
       throw error;
     }

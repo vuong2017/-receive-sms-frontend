@@ -1,8 +1,8 @@
 import { applyMiddleware, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 
-import rootReducer, { exampleInitialState } from "@/reducers/example";
-import rootSaga from "@/sagas/example";
+import reducer from "@/reducers";
+import rootSaga from "@/sagas";
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== "production") {
@@ -12,11 +12,10 @@ const bindMiddleware = (middleware) => {
   return applyMiddleware(...middleware);
 };
 
-function configureStore(initialState = exampleInitialState) {
+function configureStore() {
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
-    rootReducer,
-    initialState,
+    reducer,
     bindMiddleware([sagaMiddleware])
   );
 
