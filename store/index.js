@@ -21,13 +21,6 @@ function configureStore() {
 
   store.sagaTask = sagaMiddleware.run(rootSaga);
 
-  store.sagaTask.toPromise().catch((error) => {
-    console.log("errr", error);
-    
-    // Error here is a fatal error.
-    // None of the sagas down the road caught it.
-  });
-
   return store;
 }
 

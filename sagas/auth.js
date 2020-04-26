@@ -9,7 +9,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import es6promise from 'es6-promise'
 import 'isomorphic-unfetch'
 
-import { actionTypes, loginSuccess } from '@/actions/auth'
+import { actionTypes, loginSuccess, loginFail } from '@/actions/auth'
 import AuthHelper from "@/utils/AuthHelper";
 
 es6promise.polyfill()
@@ -19,8 +19,7 @@ function* takeLatestLogin() {
 }
 
 
-function* loginSaga({payload}) {  
-  console.log("xuong day")
+function* loginSaga({payload}) {
   try {
     const result = yield call(getApiModule('Auth').login, payload.data);
     yield put(loginSuccess(result));
@@ -32,8 +31,7 @@ function* loginSaga({payload}) {
     router.push("/");
     return result;
   } catch (error) {
-    console.log("error", error);
-    throw error;
+    yield put(loginFail(error.response));
   }
 }
 

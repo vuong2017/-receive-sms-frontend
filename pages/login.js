@@ -4,8 +4,11 @@ import { bindActionCreators } from 'redux';
 
 import { login } from '@/actions/auth'
 import { LayoutAuthentication } from "@/components/Layout";
+import { Alert } from "@/components/Alerts";
 import { capitalizeFirstLetter, validateEmail, cloneDeep } from "@/utils/helpers";
 const Login = (props) => {
+  const { errorsMessage, loginFail } = props;
+
   const defaultErrors = {
     email: {
       valid: false,
@@ -16,7 +19,7 @@ const Login = (props) => {
       message: "",
     },
   };
-  
+
   const [dataForm, setDataForm] = useState({
     email: "",
     password: "",
@@ -30,7 +33,7 @@ const Login = (props) => {
       [name]: value,
     };
     setDataForm(data);
-    const validate = validateForm({[name]: value});
+    const validate = validateForm({ [name]: value });
     if (validate.isValid) {
       setErrors({
         ...errors,
@@ -38,7 +41,7 @@ const Login = (props) => {
       });
 
     } else {
-      
+
       setErrors({
         ...errors,
         [name]: {
@@ -66,8 +69,8 @@ const Login = (props) => {
         }
         return;
       }
-      if(field === 'email') {
-        if(!validateEmail(data.email)) {
+      if (field === 'email') {
+        if (!validateEmail(data.email)) {
           result.errors = {
             ...result.errors,
             [field]: {
@@ -78,8 +81,8 @@ const Login = (props) => {
           return;
         }
       }
-      if(field === 'password') {
-        if(data.password.length < 5) {
+      if (field === 'password') {
+        if (data.password.length < 5) {
           result.errors = {
             ...result.errors,
             [field]: {
@@ -92,7 +95,7 @@ const Login = (props) => {
       }
     });
 
-    if(Object.keys(result.errors).length) {
+    if (Object.keys(result.errors).length) {
       result.isValid = true;
     }
 
@@ -113,6 +116,23 @@ const Login = (props) => {
     }
   }
 
+  function handleError() {
+
+    let errors = [];
+    if (Array.isArray(props.errorsMessage.errors)) {
+      errors = Object.keys(props.errorsMessage.errors).map(key => {
+        return props.errorsMessage.errors[key]
+      })
+    } else {
+      errors = [[props.errorsMessage.errors]]
+    }
+    return (
+      <Alert bgColor="alert-danger">
+        {errors.map((x, index) => <p key={index}>{x.join(",")}</p>)}
+      </Alert>
+    )
+  }
+
   return (
     <LayoutAuthentication>
       <div className="limiter">
@@ -120,10 +140,15 @@ const Login = (props) => {
           <div className="wrap-login100">
             <form className="login100-form validate-form" onSubmit={submit}>
               <span className="login100-form-title p-b-26">Text Now</span>
+              <div className="mb-4">
+                {
+                  loginFail ? handleError() : ''
+                }
+              </div>
               <div
                 className={`wrap-input100 validate-input ${
                   errors.email.valid ? "alert-validate" : ""
-                }`}
+                  }`}
                 data-validate={errors.email.message}
               >
                 <input
@@ -143,7 +168,7 @@ const Login = (props) => {
               <div
                 className={`wrap-input100 validate-input ${
                   errors.password.valid ? "alert-validate" : ""
-                }`}
+                  }`}
                 data-validate={errors.password.message}
               >
                 <span className="btn-show-pass">
@@ -187,9 +212,13 @@ const Login = (props) => {
 };
 
 function mapStateToProps({ auth }) {
-  const { userLogin } = auth;
+  const { userLogin, errorsMessage, loginFail } = auth;
+  console.log(errorsMessage);
+
   return {
-    userLogin
+    userLogin,
+    errorsMessage,
+    loginFail
   };
 }
 

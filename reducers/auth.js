@@ -9,6 +9,15 @@ export const authInitialState = {
     name: "",
     token: "",
     updated_at: ""
+  },
+  loginFail: false,
+  loginSuccess: false,
+  errorsMessage: {
+    errors: {
+      email: [],
+      password: [],
+    },
+    message: ""
   }
 };
 
@@ -17,7 +26,19 @@ function reducer(state = authInitialState, action) {
     case actionTypes.LOGIN_SUCCESS:
       return {
         ...state,
-        userLogin: action.payload.data
+        userLogin: action.payload.data,
+        loginSuccess: true,
+        loginFail: false
+      };
+    case actionTypes.LOGIN_FAIL:
+      return {
+        ...state,
+        loginSuccess: false,
+        loginFail: true,
+        errorsMessage: {
+          errors: action.payload.data.errors,
+          message: action.payload.data.message
+        }
       };
     default:
       return state;
