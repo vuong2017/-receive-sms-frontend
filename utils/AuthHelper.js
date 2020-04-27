@@ -27,6 +27,7 @@ class AuthHelper {
             Router.push(this.pathPageHome);
             return {};
         }
+        return {}
     }
 
     checkRedirectLoginCSR() {
@@ -34,20 +35,16 @@ class AuthHelper {
             Router.push(this.pathPageLogin);
             return {};
         }
+        return {}
     }
 
     checkRedirectHomeSSR(ctx) {
         const { req, res } = ctx;
-        let token = "";
         if (req.headers.cookie) {
-            req.headers.cookie.split(";").forEach(cookie => {
-                const arr = cookie.split("=");
-                if (arr[0] === "token") {
-                    token = arr[1];
-                }
-            })
+            const cookies = this.cookieService.convertCookieStringToObject(req.headers.cookie);
+            const token = cookies.token;
             if (token) {
-                res.writeHead(301, { Location: '/', 'Cache-Control': 'no-cache' })
+                res.writeHead(301, { Location: this.pathPageHome, 'Cache-Control': 'no-cache' })
                 res.end()
                 return {}
             }
@@ -57,21 +54,16 @@ class AuthHelper {
 
     checkRedirectLoginSSR(ctx) {
         const { req, res } = ctx;
-        let token = "";
         if (req.headers.cookie) {
-            req.headers.cookie.split(";").forEach(cookie => {
-                const arr = cookie.split("=");
-                if (arr[0] === "token") {
-                    token = arr[1];
-                }
-            })
+            const cookies = this.cookieService.convertCookieStringToObject(req.headers.cookie);
+            const token = cookies.token;
             if (!token) {
-                res.writeHead(301, { Location: '/login', 'Cache-Control': 'no-cache' })
+                res.writeHead(301, { Location: this.pathPageLogin, 'Cache-Control': 'no-cache' })
                 res.end()
                 return {}
             }
         } else {
-            res.writeHead(301, { Location: '/login', 'Cache-Control': 'no-cache' })
+            res.writeHead(301, { Location: this.pathPageLogin, 'Cache-Control': 'no-cache' })
             res.end()
             return {}
         }

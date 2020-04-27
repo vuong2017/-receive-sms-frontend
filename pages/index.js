@@ -11,7 +11,7 @@ class Home extends React.Component {
   static async getInitialProps(pageProps) {
     const authHelper = new AuthHelper();
     if (typeof window === 'undefined') {
-      return authHelper.checkRedirectLoginSSR(pageProps.ctx);
+      return authHelper.checkRedirectLoginSSR(pageProps.ctx);      
     }
     return authHelper.checkRedirectLoginCSR();
   }
