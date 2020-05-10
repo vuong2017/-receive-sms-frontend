@@ -5,11 +5,10 @@ class Auth extends BaseApi {
   constructor() {
     const module = '/auth';
     super(module);
-    this.a = "Aaa";
   }
 
   login = async (data) => {
-    const result = await this.post(this.getUrlApi('/login'), data);
+    const result = await this.axios.post(this.getUrlApi('/login'), data);
     return result;
   }
   /* chổ này nên dùng arrow function để tránh trường hợp gọi class này dùng mà gán function của class này với 1 biến khác

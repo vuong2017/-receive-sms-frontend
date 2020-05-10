@@ -1,9 +1,11 @@
 import Example from "./Example";
 import Auth from "./Auth";
+import Phone from "./Phone";
 
 const requestMap = {
   Example,
-  Auth
+  Auth,
+  Phone
 }
 
 export const getApiModule = (module) => {

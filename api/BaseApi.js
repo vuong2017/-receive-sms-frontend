@@ -1,32 +1,51 @@
 import BaseAxios from "./BaseAxios";
 import { BASE_URL } from "@/utils/config";
+import Cookie from "@/utils/Cookie"
 
-export default class BaseApi extends BaseAxios {
+export default class BaseApi {
 
   apiNameModule = "";
 
   constructor(apiNameModule) {
-    super(BASE_URL);
     this.apiNameModule = apiNameModule;
+    this.axios = new BaseAxios(BASE_URL);
+    this.cookie = new Cookie();
+    
+    const listDefaultHeadersAxios = this.getDefaultHeadersAxios();
+    console.log(listDefaultHeadersAxios);
+    this.axios.setDefaultHeaders(listDefaultHeadersAxios);
   }
 
-  getUrlApi(url) {
+  getDefaultHeadersAxios() {
+    return [
+      {
+        name: 'Authorization',
+        value: `Bearer ${this.cookie.getCookie("token")}`
+      }
+    ]
+  }
+
+  getUrlApi = (url = "") => {
     return `${this.apiNameModule}${url}`;
   }
 
-  async getList(params) {
-    return this.get(this.getUrlApi('/'), params);
+  getList = async (params) => {
+    return this.axios.get(this.getUrlApi(), params);
   }
 
-  async create(body) {
-    return this.post(this.getUrlApi('/'), body);
+  getOne = async (id, params) => {
+    return this.axios.get(this.getUrlApi(`/${id}`), params);
   }
 
-  async update(id, body) {
-    return this.patch(this.getUrlApi(`/${id}`), body);
+  create = async (body) => {
+    return this.axios.post(this.getUrlApi('/'), body);
   }
 
-  async delete(id) {
-    return this.patch(this.getUrlApi(`/${id}`));
-  } 
+  update = async (id, body) => {
+    return this.axios.patch(this.getUrlApi(`/${id}`), body);
+  }
+
+  delete = async (id) => {
+    return this.axios.patch(this.getUrlApi(`/${id}`));
+  }
 }

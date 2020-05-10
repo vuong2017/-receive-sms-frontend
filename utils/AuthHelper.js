@@ -54,19 +54,23 @@ class AuthHelper {
 
     checkRedirectLoginSSR(ctx) {
         const { req, res } = ctx;
-        if (req.headers.cookie) {
-            const cookies = this.cookieService.convertCookieStringToObject(req.headers.cookie);
-            const token = cookies.token;
-            if (!token) {
-                res.writeHead(301, { Location: this.pathPageLogin, 'Cache-Control': 'no-cache' })
-                res.end()
-                return {}
-            }
+        if (!req.headers.cookie) {
+            res.writeHead(301, { Location: this.pathPageLogin, 'Cache-Control': 'no-cache' })
+            res.end()
+            return {}
+        }
+        const cookies = this.cookieService.convertCookieStringToObject(req.headers.cookie);
+        const token = cookies.token;
+        if (token) {
+            return {
+                token
+            };
         } else {
             res.writeHead(301, { Location: this.pathPageLogin, 'Cache-Control': 'no-cache' })
             res.end()
             return {}
         }
+
     }
 }
 

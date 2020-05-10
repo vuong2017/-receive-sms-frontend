@@ -1,9 +1,7 @@
 import { CardMessage } from "@/components/Cards";
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 const SideBar = (props) => {
-  const router = useRouter()
   const { dataPhones } = props;
   return (
     <div id="sidebar" className="side">
@@ -12,7 +10,7 @@ const SideBar = (props) => {
           <div id="recent-header" className="new-header">
             <div className="account-details">
               <div className="phoneNumber ">Hello Vuong Phan</div>
-              <div className="name">Vuong Phan</div>
+              {/* <div className="name">Vuong Phan</div> */}
             </div>
           </div>
         </div>
@@ -32,7 +30,7 @@ const SideBar = (props) => {
                         <CardMessage
                           avatarColor="#FD685A"
                           messageTitle={x.phone_number}
-                          active={x.id === +router.query.id}
+                          active={true}
                           messageTime={x.created_at}
                         />
                       </a>

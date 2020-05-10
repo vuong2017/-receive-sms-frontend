@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default class BaseApi {
+export default class BaseAxios {
   _axios;
   urlPrefix;
 
@@ -9,17 +9,21 @@ export default class BaseApi {
     this.urlPrefix = urlPrefix;
   }
 
+  setDefaultHeaders(listHeader) {
+    listHeader.forEach(header => {
+      this._axios.defaults.headers.common[header.name] = header.value 
+    })
+  }
+
   getUrlPrefix(url) {
     return `${this.urlPrefix}${url}`;
   }
 
   async get(url, params = {}) {
     try {
-      console.log("diem cuoi", this.getUrlPrefix(url))
       const result = await this._axios.get(this.getUrlPrefix(url), {
         params,
       });
-      console.log(result.response());
       return result.data;
     } catch (error) {
       console.log(error);
@@ -28,6 +32,7 @@ export default class BaseApi {
   }
 
   async post(url, body = {}) {
+    console.log("Vao")
     try {
       const result = await this._axios.post(this.getUrlPrefix(url), body);
       return result.data;

@@ -1,5 +1,10 @@
 import { Cookies } from 'react-cookie';
 
+let cookies = {};
+export const setCookies = (data) => {
+    cookies = data;
+}
+
 class Cookie {
 
     cookie = null;
@@ -9,7 +14,7 @@ class Cookie {
     }
 
     getCookie(key) {
-        return this.cookie.get(key)
+        return this.cookie.get(key) || cookies[key]
     }
 
     setCookie(key, value, options = {}) {

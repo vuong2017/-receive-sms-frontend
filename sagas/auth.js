@@ -31,6 +31,7 @@ function* loginSaga({payload}) {
     router.push("/");
     return result;
   } catch (error) {
+    console.log(error)
     yield put(loginFail(error.response));
   }
 }
