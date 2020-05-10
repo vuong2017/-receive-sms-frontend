@@ -12,10 +12,12 @@ const bindMiddleware = (middleware) => {
   return applyMiddleware(...middleware);
 };
 
-function configureStore() {
+function makeStore(initialState) {
+  // initialState lấy từ component _app truyền vào cho trường hợp SSR request page lúc đầu
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     reducer,
+    initialState,
     bindMiddleware([sagaMiddleware])
   );
 
@@ -24,4 +26,4 @@ function configureStore() {
   return store;
 }
 
-export default configureStore;
+export default makeStore;
