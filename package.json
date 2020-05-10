@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "antd": "^4.2.0",
     "axios": "^0.19.2",
     "es6-promise": "^4.2.8",
     "isomorphic-unfetch": "^3.0.0",
