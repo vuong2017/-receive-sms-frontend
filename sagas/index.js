@@ -3,6 +3,10 @@ import { all, fork } from 'redux-saga/effects'
 import auth from './auth';
 import phone from './phone';
 
+//admin
+import textnow from './admin/textnow';
+
+
 export default function* root() {
-    yield all([fork(auth), fork(phone)]);
+    yield all([fork(auth), fork(phone), fork(textnow)]);
 }

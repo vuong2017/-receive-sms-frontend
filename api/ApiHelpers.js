@@ -2,10 +2,15 @@ import Example from "./Example";
 import Auth from "./Auth";
 import Phone from "./Phone";
 
+//admin
+import Textnow from "./admin/Textnow";
+
 const requestMap = {
   Example,
   Auth,
-  Phone
+  Phone,
+  //admin
+  Textnow,
 }
 
 export const getApiModule = (module) => {
