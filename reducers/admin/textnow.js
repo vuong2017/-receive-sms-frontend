@@ -62,6 +62,17 @@ function reducer(state = initialState, action) {
                     return x;
                 })
             };
+        // DELETE
+        case actionTypes.SET_LOADING_DELETE_DATA_TEXTNOW:
+            return {
+                ...state,
+                isDeleteData: action.payload.status
+            }
+        case actionTypes.DELETE_DATA_TEXTNOW_SUCCESS:
+            return {
+                ...state,
+                dataTextnows: state.dataTextnows.filter(x => x.id !== action.payload.id)
+            };
         default:
             return state;
     }

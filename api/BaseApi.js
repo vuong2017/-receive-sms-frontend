@@ -47,6 +47,6 @@ export default class BaseApi {
   }
 
   delete = async (id) => {
-    return this.axios.patch(this.getUrlApi(`/${id}`));
+    return this.axios.remove(this.getUrlApi(`/${id}`));
   }
 }

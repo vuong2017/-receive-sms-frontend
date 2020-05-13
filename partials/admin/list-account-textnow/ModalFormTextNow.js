@@ -1,11 +1,23 @@
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import FormTextNow from "@/partials/admin/list-account-textnow/FormTextNow"
+import BaseModal from "@/components/Modals/BaseModal";
 
 const ModalFormTextNow = (props) => {
 
-    const { visible, handleCancel, isLoading, handleSubmit, initialValues, titleOK, width, title, formFields, idForm } = props;
+    const {
+        visible,
+        handleCancel,
+        isLoading,
+        handleSubmit,
+        initialValues,
+        titleOK,
+        width,
+        title,
+        formFields,
+        idForm
+    } = props;
     return (
-        <Modal
+        <BaseModal
             width={width}
             title={title}
             visible={visible}
@@ -22,7 +34,7 @@ const ModalFormTextNow = (props) => {
                 onFinish={handleSubmit}
                 initialValues={initialValues}
             />
-        </Modal>
+        </BaseModal>
     )
 }
 

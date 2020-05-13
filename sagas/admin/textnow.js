@@ -8,7 +8,18 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import es6promise from 'es6-promise'
 import 'isomorphic-unfetch'
 
-import { actionTypes, getDataTextnowSuccess, setLoadingGetDataTextnow, updatePaginationTextnow, setLoadingCreateDataTextnow, createDataTextnowSuccess, setLoadingUpdateDataTextnow, updateDataTextnowSuccess } from '@/actions/admin/textnow'
+import { 
+  actionTypes, 
+  getDataTextnowSuccess, 
+  setLoadingGetDataTextnow, 
+  updatePaginationTextnow, 
+  setLoadingCreateDataTextnow, 
+  createDataTextnowSuccess, 
+  setLoadingUpdateDataTextnow, 
+  updateDataTextnowSuccess, 
+  setLoadingDeleteDataTextnow, 
+  deleteDataTextnowSuccess 
+} from '@/actions/admin/textnow'
 
 es6promise.polyfill()
 
@@ -22,6 +33,10 @@ function* takeLatestCreateDataTextnowSaga() {
 
 function* takeLatestUpdateDataTextnowSaga() {
   yield takeLatest(actionTypes.UPDATE_DATA_TEXTNOW, updateDataTextnowSaga);
+}
+
+function* takeLatestDeleteDataTextnowSaga() {
+  yield takeLatest(actionTypes.DELETE_DATA_TEXTNOW, deleteDataTextnowSaga);
 }
 
 
@@ -72,12 +87,30 @@ function* updateDataTextnowSaga(data) {
   }
 }
 
+function* deleteDataTextnowSaga(data) {
+  console.log("Vao ne2222222");
+  
+  try {
+    yield put(setLoadingDeleteDataTextnow(true));
+    const result = yield call(getApiModule('Textnow').delete, data.id);
+    yield put(deleteDataTextnowSuccess(data.id));
+    yield put(setLoadingDeleteDataTextnow(false))
+    data.callback(null, result);
+    return result;
+  } catch (error) {
+    yield put(setLoadingDeleteDataTextnow(false))
+    data.callback(error);
+    console.log(error);
+  }
+}
+
 
 export default function* root() {
   const yieldAll = [
     takeLatestGetDataTextnowSaga(),
     takeLatestCreateDataTextnowSaga(),
     takeLatestUpdateDataTextnowSaga(),
+    takeLatestDeleteDataTextnowSaga(),
   ]
   yield all(yieldAll);
 }

@@ -102,5 +102,30 @@ export function updateDataTextnowSuccess(payload) {
     }
 }
 
+// DELETE
 
+export function setLoadingDeleteDataTextnow(status) {
+    return {
+        type: actionTypes.SET_LOADING_DELETE_DATA_TEXTNOW,
+        payload: {
+            status
+        }
+    }
+}
 
+export function deleteDataTextnow(id, callback) {
+    return {
+        type: actionTypes.DELETE_DATA_TEXTNOW,
+        id,
+        callback
+    }
+}
+
+export function deleteDataTextnowSuccess(id) {
+    return {
+        type: actionTypes.DELETE_DATA_TEXTNOW_SUCCESS,
+        payload: {
+            id
+        }
+    }
+}

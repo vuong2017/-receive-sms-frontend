@@ -6,19 +6,23 @@ import { bindActionCreators } from 'redux';
 
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import AuthHelper from "@/utils/AuthHelper";
-import { getDataTextnow, updatePaginationTextnow, createDataTextnow, updateDataTextnow } from '@/actions/admin/textnow';
+import { getDataTextnow, updatePaginationTextnow, createDataTextnow, updateDataTextnow, deleteDataTextnow } from '@/actions/admin/textnow';
 import { setCookies } from "@/utils/Cookie";
 import { formatDate } from "@/utils/filter";
 import ModalAddTextNow from "@/partials/admin/list-account-textnow/ModalAddTextNow"
 import ModalUpdateTextNow from "@/partials/admin/list-account-textnow/ModalUpdateTextNow"
+import ModalConfirm from "@/components/Modals/ModalConfirm"
 
 const ListAccountTextNow = (props) => {
     const { 
         pagination, 
         isCreateData, 
         isUpdateData, 
+        isDeleteData,
         dataTextnows, 
-        updatePaginationTextnow, 
+        createDataTextnow,
+        updatePaginationTextnow,
+        deleteDataTextnow,
         getDataTextnow, 
         updateDataTextnow 
     } = props;
@@ -26,6 +30,7 @@ const ListAccountTextNow = (props) => {
 
     const [isShowAdd, setShowAdd] = useState(false)
     const [isShowUpdate, setShowUpdate] = useState(false)
+    const [isShowDelete, setShowDelete] = useState(false)
     const [textNowItemEdit, setTextNowItemEdit] = useState({
         user_name_textnow: "",
         cookie: "",
@@ -77,7 +82,7 @@ const ListAccountTextNow = (props) => {
             key: 'action',
             render: (_, row) => (
                 <div>
-                    <Button type="danger" className="mr-2">Delete</Button>
+                    <Button type="danger" className="mr-2" onClick={() => showModalDelete(row.id)}>Delete</Button>
                     <Button type="primary" onClick={() => showModalUpdate(row)}>Update</Button>
                 </div>
             ),
@@ -112,8 +117,13 @@ const ListAccountTextNow = (props) => {
             phone_number: item.phones ? item.phones[0].phone_number : null,
             phone_country_id: item.phone_country_id
         })
-        setShowUpdate(true)
+        setShowUpdate(true);
     };
+
+    const showModalDelete = (id) => {
+        setTextNowId(id);
+        setShowDelete(true);
+    }
 
     const handleCreate = (values) => {
         createDataTextnow(values, (err) => {
@@ -132,6 +142,16 @@ const ListAccountTextNow = (props) => {
                 return;
             }
             setShowUpdate(false);
+        });
+    }
+
+    const handleDelete = () => {
+        deleteDataTextnow(textnowId, (err) => {
+            if (err) {
+                console.log("co loi nay", err.response.data);
+                return;
+            }
+            setShowDelete(false);
         });
     }
 
@@ -155,6 +175,16 @@ const ListAccountTextNow = (props) => {
                     handleClose={() => setShowUpdate(false)} 
                     handleClickButtonOk={handleUpdate}
                     isLoadingButtonOk={isUpdateData}
+                />
+                <ModalConfirm
+                    width={500}
+                    title="Confirm Delete"
+                    visible={isShowDelete}
+                    handleCancel={() => setShowDelete(false)}
+                    handleClickButtonOk={handleDelete}
+                    titleOK="Delete"
+                    contentMessage="Do you want to delete?"
+                    isLoadingButtonOk={isDeleteData}
                 />
                 <Table
                     rowKey="id"
@@ -193,6 +223,7 @@ function mapStateToProps(state) {
         dataTextnows: textnow.dataTextnows,
         isCreateData: textnow.isCreateData,
         isUpdateData: textnow.isUpdateData,
+        isDeleteData: textnow.isDeleteData,
     }
 }
 
@@ -201,7 +232,8 @@ const mapDispatchToprops = (dispatch) => {
         updatePaginationTextnow,
         getDataTextnow,
         createDataTextnow,
-        updateDataTextnow
+        updateDataTextnow,
+        deleteDataTextnow
     }, dispatch)
 }
 
