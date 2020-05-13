@@ -1,5 +1,5 @@
 import BaseAxios from "./BaseAxios";
-import { BASE_URL } from "@/utils/config";
+import { BASE_URL_DEV } from "@/utils/config";
 import Cookie from "@/utils/Cookie"
 
 export default class BaseApi {
@@ -8,7 +8,7 @@ export default class BaseApi {
 
   constructor(apiNameModule) {
     this.apiNameModule = apiNameModule;
-    this.axios = new BaseAxios(BASE_URL);
+    this.axios = new BaseAxios(BASE_URL_DEV);
     this.cookie = new Cookie();
     
     const listDefaultHeadersAxios = this.getDefaultHeadersAxios();
@@ -30,6 +30,7 @@ export default class BaseApi {
   }
 
   getList = async (params) => {
+    console.log(params);
     return this.axios.get(this.getUrlApi(), params);
   }
 
@@ -46,6 +47,6 @@ export default class BaseApi {
   }
 
   delete = async (id) => {
-    return this.axios.patch(this.getUrlApi(`/${id}`));
+    return this.axios.remove(this.getUrlApi(`/${id}`));
   }
 }
