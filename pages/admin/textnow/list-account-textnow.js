@@ -6,14 +6,34 @@ import { bindActionCreators } from 'redux';
 
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import AuthHelper from "@/utils/AuthHelper";
-import { getDataTextnow, updatePaginationTextnow, createDataTextnow } from '@/actions/admin/textnow';
+import { getDataTextnow, updatePaginationTextnow, createDataTextnow, updateDataTextnow } from '@/actions/admin/textnow';
 import { setCookies } from "@/utils/Cookie";
 import { formatDate } from "@/utils/filter";
-import FormCreate from "@/partials/admin/list-account-textnow/FormCreate"
+import ModalAddTextNow from "@/partials/admin/list-account-textnow/ModalAddTextNow"
+import ModalUpdateTextNow from "@/partials/admin/list-account-textnow/ModalUpdateTextNow"
 
 const ListAccountTextNow = (props) => {
-    const { pagination, isCreateData, dataTextnows, updatePaginationTextnow, getDataTextnow, createDataTextnow } = props;
+    const { 
+        pagination, 
+        isCreateData, 
+        isUpdateData, 
+        dataTextnows, 
+        updatePaginationTextnow, 
+        getDataTextnow, 
+        updateDataTextnow 
+    } = props;
     const firstUpdate = useRef(true);
+
+    const [isShowAdd, setShowAdd] = useState(false)
+    const [isShowUpdate, setShowUpdate] = useState(false)
+    const [textNowItemEdit, setTextNowItemEdit] = useState({
+        user_name_textnow: "",
+        cookie: "",
+        login_by: null,
+        phone_number: null,
+        phone_country_id: null
+    })
+    const [textnowId, setTextNowId] = useState(null);
 
     const [columns,] = useState([
         {
@@ -55,16 +75,16 @@ const ListAccountTextNow = (props) => {
         {
             title: 'Action',
             key: 'action',
-            render: () => (
+            render: (_, row) => (
                 <div>
                     <Button type="danger" className="mr-2">Delete</Button>
-                    <Button type="primary">Update</Button>
+                    <Button type="primary" onClick={() => showModalUpdate(row)}>Update</Button>
                 </div>
             ),
         },
     ])
 
-    const [visible, setVisible] = useState(false)
+
 
     const handleTableChange = (pagination) => {
         updatePaginationTextnow(pagination);
@@ -83,45 +103,59 @@ const ListAccountTextNow = (props) => {
         getDataTextnow(data);
     }, [pagination.current])
 
-    const showModal = () => {
-        setVisible(true)
-    };
-
-    const handleCancel = e => {
-        setVisible(false)
+    const showModalUpdate = (item) => {
+        setTextNowId(item.id);
+        setTextNowItemEdit({
+            user_name_textnow: item.user_name_textnow,
+            cookie: item.cookie,
+            login_by: item.login_by,
+            phone_number: item.phones ? item.phones[0].phone_number : null,
+            phone_country_id: item.phone_country_id
+        })
+        setShowUpdate(true)
     };
 
     const handleCreate = (values) => {
-        createDataTextnow(values, (err, result) => {
-            if(err) {
+        createDataTextnow(values, (err) => {
+            if (err) {
                 console.log("co loi nay", err.response.data);
                 return;
             }
-            setVisible(false);
+            setShowAdd(false);
+        });
+    }
+
+    const handleUpdate = (values) => {
+        updateDataTextnow(textnowId, values, (err) => {
+            if (err) {
+                console.log("co loi nay", err.response.data);
+                return;
+            }
+            setShowUpdate(false);
         });
     }
 
     return (
         <LayoutAdmin>
             <Card title="List Account TextNow">
-                <Modal
-                    width={700}
-                    title="Create Account Textnow"
-                    visible={visible}
-                    onCancel={handleCancel}
-                    footer={[
-                        <Button form="myForm" key="submit" htmlType="submit" type="primary" loading={isCreateData}>
-                            Submit
-                        </Button>
-                    ]}
-                >
-                    <FormCreate onFinish={handleCreate} />
-                </Modal>
                 <div className="mb-2 text-right" >
-                    <Button type="primary" onClick={showModal}>
+                    <Button type="primary" onClick={() => setShowAdd(true)}>
                         Add new
                     </Button>
                 </div>
+                <ModalAddTextNow 
+                    isShowAdd={isShowAdd} 
+                    handleClose={() => setShowAdd(false)}
+                    handleClickButtonOk={handleCreate}
+                    isLoadingButtonOk={isCreateData}
+                />
+                <ModalUpdateTextNow 
+                    isShowUpdate={isShowUpdate} 
+                    initialValues={textNowItemEdit} 
+                    handleClose={() => setShowUpdate(false)} 
+                    handleClickButtonOk={handleUpdate}
+                    isLoadingButtonOk={isUpdateData}
+                />
                 <Table
                     rowKey="id"
                     columns={columns}
@@ -153,19 +187,21 @@ ListAccountTextNow.getInitialProps = (pageProps) => {
 
 function mapStateToProps(state) {
     const { textnow } = state
-    
+
     return {
         pagination: textnow.pagination,
         dataTextnows: textnow.dataTextnows,
-        isCreateData: textnow.isCreateData
+        isCreateData: textnow.isCreateData,
+        isUpdateData: textnow.isUpdateData,
     }
 }
 
 const mapDispatchToprops = (dispatch) => {
-    return bindActionCreators({ 
+    return bindActionCreators({
         updatePaginationTextnow,
-        getDataTextnow, 
-        createDataTextnow 
+        getDataTextnow,
+        createDataTextnow,
+        updateDataTextnow
     }, dispatch)
 }
 

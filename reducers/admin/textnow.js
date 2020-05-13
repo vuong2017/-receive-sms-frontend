@@ -46,6 +46,22 @@ function reducer(state = initialState, action) {
                 ...state,
                 dataTextnows: [action.payload.data, ...state.dataTextnows]
             };
+        // UPDATE
+        case actionTypes.SET_LOADING_UPDATE_DATA_TEXTNOW:
+            return {
+                ...state,
+                isUpdateData: action.payload.status
+            }
+        case actionTypes.UPDATE_DATA_TEXTNOW_SUCCESS:
+            return {
+                ...state,
+                dataTextnows: state.dataTextnows.map(x => {
+                    if (x.id === action.payload.data.id) {
+                        return {...x, ...action.payload.data}
+                    }
+                    return x;
+                })
+            };
         default:
             return state;
     }

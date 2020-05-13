@@ -75,5 +75,32 @@ export function createDataTextnowSuccess(payload) {
     }
 }
 
+// UPDATE
+
+export function setLoadingUpdateDataTextnow(status) {
+    return {
+        type: actionTypes.SET_LOADING_UPDATE_DATA_TEXTNOW,
+        payload: {
+            status
+        }
+    }
+}
+
+export function updateDataTextnow(id, payload, callback) {
+    return {
+        type: actionTypes.UPDATE_DATA_TEXTNOW,
+        id,
+        payload,
+        callback
+    }
+}
+
+export function updateDataTextnowSuccess(payload) {
+    return {
+        type: actionTypes.UPDATE_DATA_TEXTNOW_SUCCESS,
+        payload
+    }
+}
+
 
 

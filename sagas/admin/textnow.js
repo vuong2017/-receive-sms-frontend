@@ -8,7 +8,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import es6promise from 'es6-promise'
 import 'isomorphic-unfetch'
 
-import { actionTypes, getDataTextnowSuccess, setLoadingGetDataTextnow, updatePaginationTextnow, setLoadingCreateDataTextnow, createDataTextnowSuccess } from '@/actions/admin/textnow'
+import { actionTypes, getDataTextnowSuccess, setLoadingGetDataTextnow, updatePaginationTextnow, setLoadingCreateDataTextnow, createDataTextnowSuccess, setLoadingUpdateDataTextnow, updateDataTextnowSuccess } from '@/actions/admin/textnow'
 
 es6promise.polyfill()
 
@@ -20,7 +20,9 @@ function* takeLatestCreateDataTextnowSaga() {
   yield takeLatest(actionTypes.CREATE_DATA_TEXTNOW, createDataTextnowSaga);
 }
 
-
+function* takeLatestUpdateDataTextnowSaga() {
+  yield takeLatest(actionTypes.UPDATE_DATA_TEXTNOW, updateDataTextnowSaga);
+}
 
 
 function* getDataTextnowSaga(data) {
@@ -55,11 +57,27 @@ function* createDataTextnowSaga(data) {
   }
 }
 
+function* updateDataTextnowSaga(data) {
+  try {
+    yield put(setLoadingUpdateDataTextnow(true));
+    const result = yield call(getApiModule('Textnow').update, data.id, data.payload);
+    yield put(updateDataTextnowSuccess(result));
+    yield put(setLoadingUpdateDataTextnow(false))
+    data.callback(null, result);
+    return result;
+  } catch (error) {
+    yield put(setLoadingUpdateDataTextnow(false))
+    data.callback(error);
+    console.log(error);
+  }
+}
+
 
 export default function* root() {
   const yieldAll = [
     takeLatestGetDataTextnowSaga(),
     takeLatestCreateDataTextnowSaga(),
+    takeLatestUpdateDataTextnowSaga(),
   ]
   yield all(yieldAll);
 }
