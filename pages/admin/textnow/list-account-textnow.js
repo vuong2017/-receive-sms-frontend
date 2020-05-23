@@ -1,8 +1,10 @@
 
-import { Table, Button, Card, Modal } from 'antd';
+import { Table, Button, Card } from 'antd';
 import { connect } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import { bindActionCreators } from 'redux';
+import { handleErrorServer } from "@/utils/helpers";
+import { LIST_TYPE_NOTIFICATION } from "@/utils/config";
 
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import AuthHelper from "@/utils/AuthHelper";
@@ -14,17 +16,17 @@ import ModalUpdateTextNow from "@/partials/admin/list-account-textnow/ModalUpdat
 import ModalConfirm from "@/components/Modals/ModalConfirm"
 
 const ListAccountTextNow = (props) => {
-    const { 
-        pagination, 
-        isCreateData, 
-        isUpdateData, 
+    const {
+        pagination,
+        isCreateData,
+        isUpdateData,
         isDeleteData,
-        dataTextnows, 
+        dataTextnows,
         createDataTextnow,
         updatePaginationTextnow,
         deleteDataTextnow,
-        getDataTextnow, 
-        updateDataTextnow 
+        getDataTextnow,
+        updateDataTextnow
     } = props;
     const firstUpdate = useRef(true);
 
@@ -125,30 +127,32 @@ const ListAccountTextNow = (props) => {
         setShowDelete(true);
     }
 
-    const handleCreate = (values) => {
+    const handleCreate = (values, resetFields) => {
         createDataTextnow(values, (err) => {
             if (err) {
-                console.log("co loi nay", err.response.data);
+                handleErrorServer(err)
                 return;
             }
             setShowAdd(false);
+            resetFields();
         });
     }
 
-    const handleUpdate = (values) => {
+    const handleUpdate = (values, resetFields) => {
         updateDataTextnow(textnowId, values, (err) => {
             if (err) {
-                console.log("co loi nay", err.response.data);
+                handleErrorServer(err)
                 return;
             }
             setShowUpdate(false);
+            resetFields();
         });
     }
 
     const handleDelete = () => {
         deleteDataTextnow(textnowId, (err) => {
             if (err) {
-                console.log("co loi nay", err.response.data);
+                handleErrorServer(err)
                 return;
             }
             setShowDelete(false);
@@ -163,16 +167,16 @@ const ListAccountTextNow = (props) => {
                         Add new
                     </Button>
                 </div>
-                <ModalAddTextNow 
-                    isShowAdd={isShowAdd} 
+                <ModalAddTextNow
+                    isShowAdd={isShowAdd}
                     handleClose={() => setShowAdd(false)}
                     handleClickButtonOk={handleCreate}
                     isLoadingButtonOk={isCreateData}
                 />
-                <ModalUpdateTextNow 
-                    isShowUpdate={isShowUpdate} 
-                    initialValues={textNowItemEdit} 
-                    handleClose={() => setShowUpdate(false)} 
+                <ModalUpdateTextNow
+                    isShowUpdate={isShowUpdate}
+                    initialValues={textNowItemEdit}
+                    handleClose={() => setShowUpdate(false)}
                     handleClickButtonOk={handleUpdate}
                     isLoadingButtonOk={isUpdateData}
                 />

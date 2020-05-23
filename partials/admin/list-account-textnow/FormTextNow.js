@@ -2,19 +2,27 @@ import { Form, Input, Select } from 'antd';
 
 const FormTextNow = (props) => {
     const { onFinish, initialValues, formFields, idForm } = props;
+    const [form] = Form.useForm();
 
     const layout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 },
     };
 
+    const resetFields = () => form.resetFields()
+
+    const handelOnFinish = (values) => {
+        onFinish(values, resetFields)
+    }
+
     return (
         <Form
+            form={form}
             id={idForm}
             {...layout}
             name="basic"
             initialValues={initialValues}
-            onFinish={onFinish}
+            onFinish={handelOnFinish}
         >
             {
                 formFields.map(item => {
