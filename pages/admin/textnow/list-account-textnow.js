@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import { bindActionCreators } from 'redux';
 import { handleErrorServer } from "@/utils/helpers";
-import { LIST_TYPE_NOTIFICATION } from "@/utils/config";
 
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import AuthHelper from "@/utils/AuthHelper";
@@ -216,6 +215,7 @@ ListAccountTextNow.getInitialProps = (pageProps) => {
         return {};
     }
     authHelper.checkRedirectLoginCSR();
+    getDataTextnowRequest();
     return {};
 }
 
