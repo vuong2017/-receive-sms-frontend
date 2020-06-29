@@ -16,7 +16,7 @@ const SideBar = () => {
             childrens: [
                 {
                     id: 21,
-                    title: "List Account TextNow",
+                    title: "List Account",
                     href: "/admin/textnow/list-account-textnow"
                 },
                 {

@@ -5,10 +5,12 @@ import auth from './auth'
 
 import textnow from './admin/textnow'
 import phone from './admin/phone'
+import phoneMessage from './admin/phone-message'
 
 export default combineReducers({
     example,
     auth,
     phone,
-    textnow
+    textnow,
+    phoneMessage
 })

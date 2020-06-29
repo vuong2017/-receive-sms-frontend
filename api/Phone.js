@@ -7,8 +7,10 @@ class Phone extends BaseApi {
     super(module);
   }
 
-  getMessageByPhone = async (id, params) => {
-    return this.axios.get(this.getUrlApi(`/${id}/message`), params);
+  getMessageByPhone = async (data) => {
+    
+    const { idParams } = data;
+    return this.axios.get(this.getUrlApi(`/${idParams.id}/message`));
   }
 
 }
