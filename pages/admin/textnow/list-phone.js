@@ -8,13 +8,16 @@ import { handleErrorServer } from "@/utils/helpers";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import AuthHelper from "@/utils/AuthHelper";
 import PhoneAction from '@/actions/admin/phone';
+import PhoneMessageAction from "@/actions/admin/phone-message";
 import { setCookies } from "@/utils/Cookie";
 import { formatDate } from "@/utils/filter";
 import ModalAddTextNow from "@/partials/admin/list-account-textnow/ModalAddTextNow"
 import ModalUpdateTextNow from "@/partials/admin/list-account-textnow/ModalUpdateTextNow"
 import ModalConfirm from "@/components/Modals/ModalConfirm"
+import ModalListMessageByPhone from "@/partials/admin/list-phone/ModalListMessageByPhone"
 
 const phoneAction = new PhoneAction()
+const phoneMessageAction = new PhoneMessageAction()
 
 const ListPhone = (props) => {
     const {
@@ -23,17 +26,20 @@ const ListPhone = (props) => {
         isUpdateData,
         isDeleteData,
         dataPhones,
+        dataMessageByPhone,
         createData,
         updatePagination,
         deleteData,
         getData,
-        updateData
+        updateData,
+        getDataMessageByPhone
     } = props;
     const firstUpdate = useRef(true);
 
     const [isShowAdd, setShowAdd] = useState(false)
     const [isShowUpdate, setShowUpdate] = useState(false)
     const [isShowDelete, setShowDelete] = useState(false)
+    const [isShowListMessageByPhone, setShowListMessageByPhone] = useState(false)
     const [textNowItemEdit, setTextNowItemEdit] = useState({
         user_name_textnow: "",
         cookie: "",
@@ -63,9 +69,9 @@ const ListPhone = (props) => {
             title: 'Message',
             key: 'message',
             dataIndex: 'message',
-            render: () => {
+            render: (_, row) => {
                 return <div>
-                    <Button className="mr-2" onClick={() => showModalDelete(row.id)}>Open Message</Button>
+                    <Button className="mr-2" onClick={() => showModalListMessageByPhone(row.id)}>Open Message</Button>
                 </div>
             }
         },
@@ -135,6 +141,16 @@ const ListPhone = (props) => {
         setShowUpdate(true);
     };
 
+    const showModalListMessageByPhone = (id) => {
+        setTextNowId(id);
+        getDataMessageByPhone({
+            idParams: {
+                id
+            }
+        });
+        setShowListMessageByPhone(true);
+    }
+
     const showModalDelete = (id) => {
         setTextNowId(id);
         setShowDelete(true);
@@ -203,6 +219,15 @@ const ListPhone = (props) => {
                     contentMessage="Do you want to delete?"
                     isLoadingButtonOk={isDeleteData}
                 />
+                <ModalListMessageByPhone
+                    width={900}
+                    title="List Message"
+                    visible={isShowListMessageByPhone}
+                    dataListMessage={dataMessageByPhone}
+                    handleCancel={() => setShowListMessageByPhone(false)}
+                    handleClickButtonOk={() => setShowListMessageByPhone(false)}
+                    titleOK="Cancel"
+                />
                 <Table
                     rowKey="id"
                     columns={columns}
@@ -234,7 +259,8 @@ ListPhone.getInitialProps = (pageProps) => {
 }
 
 function mapStateToProps(state) {
-    const { phone } = state
+    const { phone, phoneMessage } = state
+
 
     return {
         pagination: phone.pagination,
@@ -242,6 +268,7 @@ function mapStateToProps(state) {
         isCreateData: phone.isCreateData,
         isUpdateData: phone.isUpdateData,
         isDeleteData: phone.isDeleteData,
+        dataMessageByPhone: phoneMessage.dataMessageByPhone
     }
 }
 
@@ -251,7 +278,8 @@ const mapDispatchToprops = (dispatch) => {
         getData: phoneAction.getData,
         createData: phoneAction.createData,
         updateData: phoneAction.updateData,
-        deleteData: phoneAction.deleteData
+        deleteData: phoneAction.deleteData,
+        getDataMessageByPhone: phoneMessageAction.getData
     }, dispatch)
 }
 
