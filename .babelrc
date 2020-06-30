@@ -1,0 +1,15 @@
+{
+  "presets": ["next/babel"],
+  "plugins": [
+    "babel-plugin-redux-saga",
+    [
+        "module-resolver",
+        {
+            "root": ["."],
+            "alias": {
+              "@": "."
+            }
+        }
+    ]
+  ]
+}
