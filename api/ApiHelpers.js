@@ -3,7 +3,7 @@ import Auth from "./Auth";
 import Phone from "./Phone";
 
 //admin
-import Textnow from "./admin/Textnow";
+import Textnow from "./admin/TextNow";
 
 const requestMap = {
   Example,
